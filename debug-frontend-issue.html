@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Frontend Issue</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        .warning { background-color: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Frontend Issue</h1>
+    
+    <div class="info result">
+        <h3>🎯 Testing URLs:</h3>
+        <p><strong>Backend:</strong> https://zero-waste-delhi-backend.onrender.com</p>
+        <p><strong>Frontend:</strong> https://elaborate-mandazi-d14229.netlify.app</p>
+    </div>
+    
+    <button onclick="testEverything()">🚀 Test Everything</button>
+    <button onclick="openFrontend()">🌐 Open Frontend</button>
+    <button onclick="clearResults()">🧹 Clear</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const BACKEND_URL = 'https://zero-waste-delhi-backend.onrender.com';
+        const FRONTEND_URL = 'https://elaborate-mandazi-d14229.netlify.app';
+        
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        function openFrontend() {
+            addResult('🌐 Opening frontend...', 'info');
+            window.open(FRONTEND_URL, '_blank');
+        }
+        
+        async function testEverything() {
+            clearResults();
+            addResult('🚀 Starting comprehensive test...', 'info');
+            
+            // Test 1: Backend Health
+            addResult('1️⃣ Testing backend health...', 'info');
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/health`);
+                const data = await response.json();
+                addResult(`✅ Backend: ${data.message} (${data.environment})`, 'success');
+            } catch (error) {
+                addResult(`❌ Backend Failed: ${error.message}`, 'error');
+                return;
+            }
+            
+            // Test 2: Frontend Accessibility
+            addResult('2️⃣ Testing frontend accessibility...', 'info');
+            try {
+                const response = await fetch(FRONTEND_URL);
+                if (response.ok) {
+                    addResult(`✅ Frontend: Accessible (Status: ${response.status})`, 'success');
+                    
+                    // Check content type
+                    const contentType = response.headers.get('content-type');
+                    addResult(`📄 Content-Type: ${contentType}`, 'info');
+                    
+                } else {
+                    addResult(`❌ Frontend: Status ${response.status}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Frontend Failed: ${error.message}`, 'error');
+            }
+            
+            // Test 3: CORS from Frontend to Backend
+            addResult('3️⃣ Testing CORS (Frontend → Backend)...', 'info');
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Origin': FRONTEND_URL
+                    }
+                });
+                
+                if (response.ok) {
+                    addResult(`✅ CORS: Working perfectly!`, 'success');
+                } else {
+                    addResult(`⚠️ CORS: Status ${response.status}`, 'warning');
+                }
+            } catch (error) {
+                addResult(`❌ CORS Failed: ${error.message}`, 'error');
+            }
+            
+            // Test 4: Auth Endpoint
+            addResult('4️⃣ Testing auth endpoint...', 'info');
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'testpass'
+                    })
+                });
+                
+                const data = await response.json();
+                if (response.status === 400 || response.status === 401) {
+                    addResult(`✅ Auth Endpoint: Working (${data.message})`, 'success');
+                } else {
+                    addResult(`⚠️ Auth Endpoint: Status ${response.status}`, 'warning');
+                }
+            } catch (error) {
+                addResult(`❌ Auth Endpoint Failed: ${error.message}`, 'error');
+            }
+            
+            addResult('🎉 Test complete!', 'success');
+            
+            // Final recommendation
+            if (document.querySelectorAll('.success').length >= 3) {
+                addResult('✅ Everything looks good! Your app should work. Try opening the frontend.', 'success');
+            } else {
+                addResult('⚠️ There are still issues. Check the errors above.', 'warning');
+            }
+        }
+    </script>
+</body>
+</html>

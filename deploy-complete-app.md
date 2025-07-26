@@ -1,40 +1,51 @@
-# 🚀 Complete App Deployment Guide
+# Quick Deploy Commands
 
-## ✅ Backend Status
-- **URL**: https://zero-waste-delhi-backend.onrender.com
-- **Status**: Deployed with CORS fix
-- **Auto-redeploy**: Triggered by GitHub push (should be updating now)
+## Prerequisites Check
+```bash
+# Ensure you have the required accounts
+# 1. GitHub account with your code pushed
+# 2. Render account: https://render.com
+# 3. Vercel account: https://vercel.com
+```
 
-## 🎯 Frontend Deployment Options
+## Option 1: Manual Deployment (Recommended)
 
-### Option 1: Netlify (Recommended - Easiest)
-1. Go to [netlify.com](https://netlify.com)
-2. Sign up/login with GitHub
-3. Click "Add new site" → "Deploy manually"
-4. Drag and drop your `dist` folder
-5. Your app will be live instantly!
+### Backend (Render):
+1. Go to https://render.com → New → Web Service
+2. Connect GitHub repo
+3. Settings:
+   - Name: `zero-waste-delhi-backend`
+   - Build: `cd backend && npm install`
+   - Start: `cd backend && npm start`
+4. Add environment variables from DEPLOYMENT_GUIDE.md
+5. Deploy
 
-### Option 2: Vercel
-1. Go to [vercel.com](https://vercel.com)
-2. Sign up/login with GitHub
-3. Import your GitHub repository
-4. Vercel will auto-detect it's a Vite app
-5. Deploy!
+### Frontend (Vercel):
+1. Go to https://vercel.com → New Project
+2. Import GitHub repo
+3. Framework: Vite
+4. Deploy
+5. Add environment variable: `VITE_API_URL=https://your-backend.onrender.com`
 
-### Option 3: GitHub Pages
-1. Go to your GitHub repository settings
-2. Pages → Source: GitHub Actions
-3. Your app will deploy automatically
+## Option 2: CLI Deployment
 
-## 🔧 What's Fixed
-- ✅ CORS configuration updated in backend
-- ✅ Frontend hardcoded to use production backend URL
-- ✅ All localhost references removed
-- ✅ Production build created
+### Install CLIs:
+```bash
+npm install -g vercel
+```
 
-## 🎉 After Deployment
-Once both are deployed, you'll have:
-- **Backend**: https://zero-waste-delhi-backend.onrender.com
-- **Frontend**: https://your-app-name.netlify.app (or similar)
+### Deploy Frontend:
+```bash
+# Login and deploy
+vercel login
+vercel --prod
+```
 
-Your Zero Waste Delhi app will be fully functional!
+## Post-Deployment:
+1. Update vercel.json with actual backend URL
+2. Test the application
+3. Monitor logs for any issues
+
+## Expected URLs:
+- Frontend: `https://your-app.vercel.app`
+- Backend: `https://your-backend.onrender.com`

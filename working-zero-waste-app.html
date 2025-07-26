@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero Waste Delhi - Working Version</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold">🌱 Zero Waste Delhi</h1>
+                    <p class="text-green-100 mt-1">Making Delhi cleaner, one step at a time</p>
+                </div>
+                <div id="userInfo" class="hidden">
+                    <span id="userName" class="text-green-100"></span>
+                    <button onclick="logout()" class="ml-4 bg-green-700 px-4 py-2 rounded hover:bg-green-800">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Connection Status -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">🔗 Connection Status</h2>
+            <div id="connectionStatus" class="text-gray-600">Checking connection...</div>
+        </div>
+
+        <!-- Auth Section -->
+        <div id="authSection" class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex space-x-4 mb-6">
+                <button id="loginTab" onclick="showLogin()" class="px-4 py-2 bg-green-600 text-white rounded">Login</button>
+                <button id="signupTab" onclick="showSignup()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm">
+                <h2 class="text-xl font-semibold mb-4">🔐 Login</h2>
+                <form onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="loginEmail" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" 
+                               value="jaingarima360@gmail.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="loginPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" 
+                               value="garima123" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700">
+                        Login
+                    </button>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupForm" class="hidden">
+                <h2 class="text-xl font-semibold mb-4">📝 Sign Up</h2>
+                <form onsubmit="handleSignup(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" id="signupName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="signupEmail" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Phone</label>
+                        <input type="tel" id="signupPhone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="signupPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700">
+                        Sign Up
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard (Hidden initially) -->
+        <div id="dashboard" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Total Waste Collected</h3>
+                    <p id="totalWaste" class="text-3xl font-bold text-green-600">0 kg</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Reward Points</h3>
+                    <p id="rewardPoints" class="text-3xl font-bold text-blue-600">0</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Rank</h3>
+                    <p id="userRank" class="text-3xl font-bold text-purple-600">#1</p>
+                </div>
+            </div>
+
+            <!-- Add Waste Form -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">🗑️ Add Waste Entry</h2>
+                <form onsubmit="handleAddWaste(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Waste Type</label>
+                        <select id="wasteType" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                            <option value="">Select waste type</option>
+                            <option value="plastic">Plastic</option>
+                            <option value="paper">Paper</option>
+                            <option value="organic">Organic</option>
+                            <option value="metal">Metal</option>
+                            <option value="glass">Glass</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Weight (kg)</label>
+                        <input type="number" id="wasteWeight" step="0.1" min="0.1" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Location</label>
+                        <input type="text" id="wasteLocation" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" 
+                               placeholder="Auto-detected or enter manually" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700">
+                        Add Waste Entry
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="space-y-4"></div>
+    </main>
+
+    <script>
+        const BACKEND_URL = 'https://zero-waste-delhi-backend.onrender.com';
+        let currentUser = null;
+
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `p-4 rounded-lg ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                'bg-blue-100 text-blue-800'
+            }`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+
+        function updateConnectionStatus(message, type = 'info') {
+            const status = document.getElementById('connectionStatus');
+            status.innerHTML = `<div class="${
+                type === 'success' ? 'text-green-600' :
+                type === 'error' ? 'text-red-600' :
+                'text-blue-600'
+            }">${message}</div>`;
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('signupForm').classList.add('hidden');
+            document.getElementById('loginTab').className = 'px-4 py-2 bg-green-600 text-white rounded';
+            document.getElementById('signupTab').className = 'px-4 py-2 bg-gray-300 text-gray-700 rounded';
+        }
+
+        function showSignup() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('signupForm').classList.remove('hidden');
+            document.getElementById('loginTab').className = 'px-4 py-2 bg-gray-300 text-gray-700 rounded';
+            document.getElementById('signupTab').className = 'px-4 py-2 bg-green-600 text-white rounded';
+        }
+
+        function showDashboard(user) {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('userInfo').classList.remove('hidden');
+            document.getElementById('userName').textContent = `Welcome, ${user.name}!`;
+            
+            // Update dashboard data
+            document.getElementById('totalWaste').textContent = `${user.totalWasteCollected || 0} kg`;
+            document.getElementById('rewardPoints').textContent = user.points || 0;
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('userInfo').classList.add('hidden');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            addResult('✅ Logged out successfully', 'success');
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                updateConnectionStatus('🔄 Logging in...', 'info');
+                
+                const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUser = data.user;
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    addResult(`✅ Login successful! Welcome ${data.user.name}`, 'success');
+                    updateConnectionStatus('✅ Connected and logged in', 'success');
+                    showDashboard(data.user);
+                } else {
+                    const errorData = await response.json();
+                    addResult(`❌ Login failed: ${errorData.message}`, 'error');
+                    updateConnectionStatus('❌ Login failed', 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Connection error: ${error.message}`, 'error');
+                updateConnectionStatus('❌ Connection failed', 'error');
+            }
+        }
+
+        async function handleSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const phone = document.getElementById('signupPhone').value;
+            const password = document.getElementById('signupPassword').value;
+
+            try {
+                updateConnectionStatus('🔄 Creating account...', 'info');
+                
+                const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUser = data.user;
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    addResult(`✅ Account created! Welcome ${data.user.name}`, 'success');
+                    updateConnectionStatus('✅ Connected and registered', 'success');
+                    showDashboard(data.user);
+                } else {
+                    const errorData = await response.json();
+                    addResult(`❌ Signup failed: ${errorData.message}`, 'error');
+                    updateConnectionStatus('❌ Signup failed', 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Connection error: ${error.message}`, 'error');
+                updateConnectionStatus('❌ Connection failed', 'error');
+            }
+        }
+
+        async function handleAddWaste(event) {
+            event.preventDefault();
+            const type = document.getElementById('wasteType').value;
+            const weight = parseFloat(document.getElementById('wasteWeight').value);
+            const location = document.getElementById('wasteLocation').value;
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${BACKEND_URL}/api/waste`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ 
+                        type, 
+                        weight, 
+                        location,
+                        coordinates: { latitude: 28.6315, longitude: 77.2167 }
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult(`✅ Waste entry added! ${weight}kg of ${type} at ${location}`, 'success');
+                    
+                    // Update dashboard
+                    const currentTotal = parseFloat(document.getElementById('totalWaste').textContent);
+                    document.getElementById('totalWaste').textContent = `${(currentTotal + weight).toFixed(1)} kg`;
+                    
+                    // Clear form
+                    document.getElementById('wasteType').value = '';
+                    document.getElementById('wasteWeight').value = '';
+                    document.getElementById('wasteLocation').value = '';
+                } else {
+                    const errorData = await response.json();
+                    addResult(`❌ Failed to add waste: ${errorData.message}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Error adding waste: ${error.message}`, 'error');
+            }
+        }
+
+        // Check connection on load
+        async function checkConnection() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/health`);
+                const data = await response.json();
+                updateConnectionStatus(`✅ Connected to backend (${data.environment})`, 'success');
+                
+                // Auto-detect location
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        document.getElementById('wasteLocation').value = `Lat: ${position.coords.latitude.toFixed(4)}, Lng: ${position.coords.longitude.toFixed(4)}`;
+                    });
+                }
+                
+            } catch (error) {
+                updateConnectionStatus(`❌ Backend connection failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize
+        checkConnection();
+        
+        // Check if user is already logged in
+        const savedUser = localStorage.getItem('user');
+        const token = localStorage.getItem('token');
+        if (savedUser && token) {
+            currentUser = JSON.parse(savedUser);
+            showDashboard(currentUser);
+            updateConnectionStatus('✅ Already logged in', 'success');
+        }
+    </script>
+</body>
+</html>
