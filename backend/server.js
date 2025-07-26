@@ -12,9 +12,8 @@ import binRoutes from './routes/bins.js';
 import leaderboardRoutes from './routes/leaderboard.js';
 import locationRoutes from './routes/location.js';
 import locationWasteRoutes from './routes/locationWaste.js';
-import debugRoutes from './routes/debug.js';
-import testLocationRoutes from './routes/test-location.js';
-import debugLocationRoutes from './routes/debug-location.js';
+// Debug routes removed for deployment
+// Removed test routes to fix deployment
 import simpleWasteRoutes from './routes/simpleWaste.js';
 
 // Load environment variables
@@ -63,9 +62,8 @@ app.use('/api/bins', binRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/location', locationRoutes);
 app.use('/api/location-waste', locationWasteRoutes);
-app.use('/api/debug', debugRoutes);
-app.use('/api/test-location', testLocationRoutes);
-app.use('/api/debug-location', debugLocationRoutes);
+// Debug routes removed
+// Test routes removed for deployment stability
 app.use('/api/simple-waste', simpleWasteRoutes);
 
 // Health check endpoint
