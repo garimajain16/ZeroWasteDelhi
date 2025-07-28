@@ -5,8 +5,11 @@ import { sendWelcomeEmail, sendAdminNotification } from '../services/emailServic
 
 // Generate JWT Token
 const generateToken = (id) => {
+  // Ensure JWT_EXPIRE is properly formatted
+  const jwtExpire = process.env.JWT_EXPIRE?.trim() || '7d';
+  
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE
+    expiresIn: jwtExpire
   });
 };
 

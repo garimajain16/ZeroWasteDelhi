@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { QrCode, MapPin, Scale, Trash2, Camera, Navigation, AlertCircle, CheckCircle, List, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import QrScanner from 'qr-scanner';
 
 const AddWaste: React.FC = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState<'location' | 'binSelection' | 'scanner' | 'details' | 'success'>('location');
   const [location, setLocation] = useState<{ lat: number; lng: number; address: string } | null>(null);
   const [locationLoading, setLocationLoading] = useState(false);
@@ -1063,7 +1065,7 @@ const AddWaste: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => window.location.href = '/dashboard'}
+                  onClick={() => navigate('/dashboard')}
                   className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:border-green-500 dark:hover:border-green-400 transition-all duration-300"
                 >
                   Go to Dashboard
