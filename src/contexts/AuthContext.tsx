@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const API_BASE_URL = 'https://zero-waste-delhi-backend.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://zero-waste-delhi-backend.onrender.com';
 
 interface User {
   id: string;
@@ -76,7 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     
     try {
-      console.log('🔐 Attempting login to:', `${API_BASE_URL}/api/auth/login`);
+      // Attempting login
       
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
@@ -139,7 +139,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     
     try {
-      console.log('📝 Attempting signup to:', `${API_BASE_URL}/api/auth/register`);
+      // Attempting signup
       
       const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: 'POST',

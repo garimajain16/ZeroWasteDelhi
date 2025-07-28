@@ -1,0 +1,22 @@
+# Exclude development and test files from Vercel deployment
+test-*.js
+debug-*.js
+check-*.js
+fix-*.js
+final-*.js
+quick-*.js
+*.bat
+*.ps1
+auto-start.*
+complete-setup.*
+setup-simple-system.*
+manual-start-commands.md
+TROUBLESHOOTING_GUIDE.md
+*_COMPLETE.md
+*_FIXED.md
+*_INSTRUCTIONS.md
+backend/
+node_modules/
+.env.local
+.env.development
+.env.test

@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
+    // Check if MONGODB_URI exists
+    if (!process.env.MONGODB_URI) {
+      throw new Error('MONGODB_URI environment variable is not defined');
+    }
+    
     // Set mongoose options
     mongoose.set('strictQuery', false);
     
@@ -25,6 +30,9 @@ const connectDB = async () => {
     // Try to create database if it doesn't exist
     console.log('🔄 Attempting to create database...');
     try {
+      if (!process.env.MONGODB_URI) {
+        throw new Error('MONGODB_URI is required for database creation');
+      }
       const conn = await mongoose.connect(process.env.MONGODB_URI.replace('/zero_waste_delhi_app', '/admin'), {
         useNewUrlParser: true,
         useUnifiedTopology: true,

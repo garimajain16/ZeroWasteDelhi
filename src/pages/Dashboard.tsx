@@ -57,37 +57,25 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE_URL = 'https://zero-waste-delhi-backend.onrender.com';
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://zero-waste-delhi-backend.onrender.com';
 
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      console.log('📊 Starting dashboard data fetch...');
+      // Dashboard data fetch started
 
       // Get user info from localStorage
       const userData = localStorage.getItem('user');
       const sessionId = localStorage.getItem('sessionId');
       const userInfo = userData ? JSON.parse(userData) : null;
       
-      console.log('📊 User info:', { 
-        hasUserData: !!userData, 
-        hasSessionId: !!sessionId, 
-        userEmail: userInfo?.email,
-        userName: userInfo?.name 
-      });
-      
-      // Enhanced debugging
-      console.log('📊 Raw localStorage data:', {
-        userData: userData,
-        sessionId: sessionId,
-        token: localStorage.getItem('token')
-      });
+      // User info and localStorage data validated
 
       // If no user info at all, set empty data
       if (!userInfo?.email && !sessionId) {
-        console.log('📊 No user info found, setting empty data');
+        // No user info found, setting empty data
         setWasteStats({
           overall: { totalEntries: 0, totalWeight: 0, totalPoints: 0, totalCarbonSaved: 0 },
           byType: [],
